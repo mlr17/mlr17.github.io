@@ -1,0 +1,162 @@
+{
+    "name": "flare",
+    "children": [
+        {
+            "name": "animate",
+            "children": [{
+                    "name": "Easing",
+                    "size": 2226
+                },
+                {
+                    "name": "FunctionSequence",
+                    "size": 1655
+                },
+                {
+                    "name": "interpolate",
+                    "size": 3542
+                },
+                {
+                    "name": "Parallel",
+                    "size": 5176
+                },
+                {
+                    "name": "Scheduler",
+                    "size": 9346
+                },
+                {
+                    "name": "Tween",
+                    "size": 6006
+                }
+            ]
+        },
+        {
+            "name": "Datas",
+            "children": [{
+                    "name": "converters",
+                    "size": 4165
+                },
+                {
+                    "name": "DataField",
+                    "size": 2100
+                },
+                {
+                    "name": "DataSchema",
+                    "size": 2865
+                },
+                {
+                    "name": "DataSet",
+                    "size": 1586
+                },
+                {
+                    "name": "DataSource",
+                    "size": 3331
+                }
+            ]
+        },
+        {
+            "name": "display",
+            "children": [{
+                    "name": "DirtySprite",
+                    "size": 2732
+                },
+                {
+                    "name": "LineSprite",
+                    "size": 1732
+                },
+                {
+                    "name": "RectSprite",
+                    "size": 3623
+                },
+                {
+                    "name": "TextSprite",
+                    "size": 923
+                }
+            ]
+        },
+        {
+            "name": "physics",
+            "children": [{
+                    "name": "DragForce",
+                    "size": 1082
+                },
+                {
+                    "name": "GravityForce",
+                    "size": 1336
+                },
+                {
+                    "name": "IForce",
+                    "size": 919
+                },
+                {
+                    "name": "NBodyForce",
+                    "size": 1918
+                },
+                {
+                    "name": "Particle",
+                    "size": 2822
+                },
+                {
+                    "name": "Simulation",
+                    "size": 3265
+                }
+            ]
+        },
+        {
+            "name": "query",
+            "children": [
+                {
+                    "name": "CompositeExpression",
+                    "size": 5248
+                },
+                {
+                    "name": "ExpressionIterator",
+                    "size": 2748
+                },     
+                {
+                    "name": "Match",
+                    "size": 3748
+                },
+                {
+                    "name": "Or",
+                    "size": 970
+                },
+                {
+                    "name": "Range",
+                    "size": 1594
+                },
+                {
+                    "name": "Sum",
+                    "size": 791
+                }
+            ]
+        },
+        {
+            "name": "scale",
+            "children": [{
+                    "name": "IScaleMap",
+                    "size": 2105
+                },
+                {
+                    "name": "LinearScale",
+                    "size": 1316
+                },
+                {
+                    "name": "OrdinalScale",
+                    "size": 3770
+                },
+                {
+                    "name": "MoonSize",
+                    "size": 2566
+                },
+                {
+                    "name": "ScaleType",
+                    "size": 1821
+                },
+                {
+                    "name": "TimeScale",
+                    "size": 9821
+                }
+            ]
+        }
+    ]
+}

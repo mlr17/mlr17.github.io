@@ -1,0 +1,150 @@
+{
+    "name": "jame",
+    "children": [
+        {
+            "name": "flare",
+            "children": [{
+                    "name": "Ease",
+                    "size": 3556
+                },
+                {
+                    "name": "Sequence",
+                    "size": 868
+                },
+                {
+                    "name": "interpolate",
+                    "size": 2389
+                },
+                {
+                    "name": "Parallel",
+                    "size": 4200
+                },
+                {
+                    "name": "Schedul",
+                    "size": 3556
+                }
+            ]
+        },
+        {
+            "name": "intern",
+            "children": [{
+                    "name": "converters",
+                    "size": 3698
+                },
+                {
+                    "name": "DataField",
+                    "size": 2530
+                },
+                {
+                    "name": "DataSchema",
+                    "size": 4065
+                },
+                {
+                    "name": "DataSet",
+                    "size": 1586
+                },
+                {
+                    "name": "DataSource",
+                    "size": 1585
+                },
+                {
+                    "name": "DataSource",
+                    "size": 1000
+                }
+            ]
+        },
+        {
+            "name": "ordinary",
+            "children": [{
+                    "name": "DirtySprite",
+                    "size": 2939
+                },
+                {
+                    "name": "LineSprite",
+                    "size": 2136
+                },
+                {
+                    "name": "RectSprite",
+                    "size": 1623
+                },
+                {
+                    "name": "TextSprite",
+                    "size": 5120
+                }
+            ]
+        },
+        {
+            "name": "mathes",
+            "children": [{
+                    "name": "DragForce",
+                    "size": 698
+                },
+                {
+                    "name": "GravityForce",
+                    "size": 1800
+                },
+                {
+                    "name": "Force",
+                    "size": 2500
+                },
+                {
+                    "name": "NBodyForce",
+                    "size": 1918
+                },
+                {
+                    "name": "FareForce",
+                    "size": 1325
+                },
+                {
+                    "name": "Particle",
+                    "size": 2822
+                }               
+            ]
+        },
+        {
+            "name": "quest",
+            "children": [
+                {
+                    "name": "CompositeExpression",
+                    "size": 5248
+                },
+                {
+                    "name": "ExpressionIterator",
+                    "size": 2748
+                },     
+                {
+                    "name": "Mace",
+                    "size": 3748
+                },          
+                {
+                    "name": "Rage",
+                    "size": 1394
+                },
+                {
+                    "name": "Sone",
+                    "size": 2005
+                }
+            ]
+        },
+        {
+            "name": "lowe",
+            "children": [{
+                    "name": "IScaleMap",
+                    "size": 2000
+                },
+                {
+                    "name": "LinearScale",
+                    "size": 1316
+                },
+                {
+                    "name": "OrdinalScale",
+                    "size": 3770
+                },
+                {
+                    "name": "MoonSize",
+                    "size": 2055
+                }
+            ]
+        }
+    ]
+   }
