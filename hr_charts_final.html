@@ -108,7 +108,7 @@
         border:2px solid rgb(132, 131, 131);
         position: relative;
 		top: 18vh;	
-		width: 80%;
+		width: 75%;
 		height: 60%;
 		margin:auto;
         border-radius: 15px;
@@ -2237,7 +2237,9 @@
                 break;
             case 8:
                 group_Q.text("在节点路径“block-brosh-Hazelnut-Walnut”中，第四层级节点“Walnut”的子节点中，“Pluma”是否是数值最大的节点？");
-                break;
+                answer3.style("display","none")
+                answer4.style("display","none")
+		break;
         }
     }
     function unchecked_all_input(){
@@ -2292,6 +2294,7 @@
                 d3.select('.button_box').style("display","none");
                 d3.select('.shadow').style("display","");
                 d3.select('.modal_text').text("实验结束，感谢参与！");
+		d3.select('.button_box').style("display","none");
 
             } else {
                 current_obj = obj_array[current_obj.id];
