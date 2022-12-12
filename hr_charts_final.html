@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>HR_charts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- <link rel="stylesheet" href="semantic-dist/semantic.min.js"> -->
+    <style>
+        body {
+            margin: 3px ;
+        }
+        .svg1 {
+            font-size: 1em;
+            position: relative;
+			left: 20%;
+        }
+        .svg2 {
+            position: absolute;
+            top: 5vh;
+            font: 32px sans-serif;
+        }
+        .shadow{
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+			}
+        .shadow1{
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+			}
+		.modal{
+				position: relative;
+				top: 20%;
+                border:2px solid rgb(110, 110, 112);
+				background: #fff;
+				width: 40%;
+				height: 25%;
+				text-align:center;
+				margin: 5% auto;
+                opacity: 1;
+		}
+        .close_box{
+            position: absolute;
+            right: 0px;
+			top: -2px;
+            cursor: pointer;
+			font-size: 1.5em;
+            text-align:center;
+            border: 0px;
+            background-color: rgb(110, 110, 112);
+        }
+		
+        .close_box:active {
+            box-shadow: inset -2px -2px 3px rgba(118, 114, 114),
+                inset 2px 2px 3px rgb(143, 144, 147);
+        }
+        .close_box:hover {
+            background-color: rgb(143, 144, 147);
+        }
+        .evaluate_shift{
+            position: absolute;
+            left:74vw;
+            bottom: 100px;
+            cursor: pointer;
+            border: 0;
+            line-height: 3;
+            padding: 0 18px;
+            font-size: 1rem;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            border-radius: 10px;
+            background-color: rgb(50, 50, 50);
+            
+        }
+        .button_start {
+            position: relative;
+            margin: auto;
+            display: block;
+            bottom: -3vh;
+            cursor: pointer;
+            border: 0;
+            line-height: 3;
+            padding: 0 18px;
+            font-size: 1rem;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            border-radius: 10px;
+            background-color: rgb(50, 50, 50);
+            
+        }
+        .evaluate_shift:hover,.button_start:hover {
+            background-color: rgb(66, 66, 67);
+        }
+        .evaluate_shift:active,.button_start:active {
+            box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
+                inset 2px 2px 3px rgba(0, 0, 0, .6);
+        }
+        .box1{
+        background: rgb(255, 255, 255);
+        border:2px solid rgb(132, 131, 131);
+        position: relative;
+		top: 18vh;	
+		width: 80%;
+		height: 60%;
+		margin:auto;
+        border-radius: 15px;
+        padding-bottom: 1%;
+        padding-top: 1.5%;
+        opacity: 1;
+        }
+        .box2{
+            width: 90%;
+            margin:auto;
+            font: 1.5em sans-serif;
+            padding-bottom:2%;
+        }
+        .box3{
+            width: 90%;
+            margin:auto;
+            text-align: right;
+            background: rgb(245, 245, 245);
+            border:1px solid rgb(219, 216, 216);
+            
+            font: 16px sans-serif;
+            font-weight:500;
+        }
+        .box4,.box5,.box6,.box7{
+            width: 90%;
+            margin:auto;
+            background: rgb(255, 255, 255);
+            border:1px solid rgb(219, 216, 216);
+
+            font: 16px sans-serif;
+            text-align: right;
+            font-weight:600;
+        }
+        .special_label{
+            float: left;
+        }
+        .form_label{
+            position: relative;
+            right:10px
+        }
+        .form_label1{
+            position: relative;
+            right:384px
+        }
+        .form_label2{
+            position: relative;
+            right:335px
+        }
+        .form_label3{
+            position: relative;
+            right:283px
+        }
+        .form_label4{
+            position: relative;
+            right:232px
+        }
+        .form_label5{
+            position: relative;
+            right:175px
+        }
+        .form_label6{
+            position: relative;
+            right:106px
+        }
+        .form_label7{
+            position: relative;
+            right:40px
+        }
+        .ui.right.labeled.icon.button{
+            position: absolute;
+			right:41%;
+            bottom: 2%;
+            margin: auto;
+        }
+        .cover{
+            position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+                padding: 5%;
+        }
+        .title{
+            margin: auto;
+            text-align: center;
+        }
+        
+        .content{
+            margin: auto;
+            
+            padding: 3%;
+        }
+        .text_exp{
+            margin: auto;
+            padding-left: 21%;
+            padding-right: 21%;
+            padding-bottom: 2%;
+            font: 1.2em sans-serif;
+        }
+        .image{
+            display: block;
+            margin: auto;
+            box-shadow: 0 0 3px 3px rgba(118, 118, 118, 0.5);
+        }
+        .modal_text{
+            font-size: 3em;
+        }
+
+    </style>
+</head>
+
+<div class="cover">
+   <div class="title">
+    <h1>层次化数据可视化布局研究实验</h1>
+   </div>
+    <div class="content">
+        <div class="text_exp">
+            <p><b>实验说明：</b>本次实验一共包括八个数据可视化图表，您需要完成图表对应的实验任务。
+                如下图所示，图表呈现在界面中央，对应的任务呈现在界面右侧，
+                选择相应的选项后尽可能快地点击“确认”，因为需要记录您的完成时间。
+                点击“确认”后会弹出一个主观评价量表，您需要根据您在当前任务中的主观感受完成量表。</p>
+        </div>
+        <img class= "image" src="cover_image.jpg" alt="cover_image" width="54%">
+        <button type="button" class="button_start" onclick="start_charts()">开始实验</button>
+    </div>
+</div>
+
+<div class="svg_box">
+</div>
+<div class="shadow">
+    <div class="modal">
+        <button class="close_box" onclick="hide_modal_1(hide_mode)"><i class="close icon"></i>关闭</button>
+        <br><br>
+        <h1 class="modal_text">请将题目做完哟！</h1>
+    </div>
+</div>
+<div class="shadow1"> 
+    <div class="box1">
+        <div class="box2">根据你完成以上任务的感受，请对以下指标进行打分</div>
+        <div class="box3" >
+            <dl>
+                <label class="form_label">非常同意&emsp;</label>
+                <label class="form_label">同意&emsp;</label>
+                <label class="form_label">比较同意&emsp;</label>
+                <label class="form_label">一般&emsp;</label>
+                <label class="form_label">比较不同意&emsp;</label>
+                <label class="form_label">不同意&emsp;</label>
+                <label class="form_label">非常不同意</label>
+            </dl>
+        </div>
+        <div class="box4">
+            <dl class="option1">
+                <label class="special_label">&emsp;我认为该任务中的图表是符合浏览习惯的</label>
+                <label class="form_label1"><input type="radio" name="A" value="1"></label>
+                <label class="form_label2"><input type="radio" name="A" value="2"></label>
+                <label class="form_label3"><input type="radio" name="A" value="3"></label>
+                <label class="form_label4"><input type="radio" name="A" value="4"></label>
+                <label class="form_label5"><input type="radio" name="A" value="5"></label>
+                <label class="form_label6"><input type="radio" name="A" value="6"></label>
+                <label class="form_label7"><input type="radio" name="A" value="7"></label>
+            </dl>
+        </div>
+        <div class="box5">
+            <dl class="option2">
+                <label class="special_label">&emsp;我认为该任务中的图表呈现信息的疏密度是合适的</label>
+                <label class="form_label1"><input type="radio" name="B" value="1"></label>
+                <label class="form_label2"><input type="radio" name="B" value="2"></label>
+                <label class="form_label3"><input type="radio" name="B" value="3"></label>
+                <label class="form_label4"><input type="radio" name="B" value="4"></label>
+                <label class="form_label5"><input type="radio" name="B" value="5"></label>
+                <label class="form_label6"><input type="radio" name="B" value="6"></label>
+                <label class="form_label7"><input type="radio" name="B" value="7"></label>
+            </dl>
+        </div>
+        <div class="box6">
+            <dl class="option3">
+                <label class="special_label">&emsp;我对完成该任务的难易度是满意的</label>
+                <label class="form_label1"><input type="radio" name="C" value="1"></label>
+                <label class="form_label2"><input type="radio" name="C" value="2"></label>
+                <label class="form_label3"><input type="radio" name="C" value="3"></label>
+                <label class="form_label4"><input type="radio" name="C" value="4"></label>
+                <label class="form_label5"><input type="radio" name="C" value="5"></label>
+                <label class="form_label6"><input type="radio" name="C" value="6"></label>
+                <label class="form_label7"><input type="radio" name="C" value="7"></label>
+        </div>
+        <div class="box7">
+            <dl class="option4">
+                <label class="special_label">&emsp;我对完成该任务所花费的时间是满意的</label>
+                <label class="form_label1"><input type="radio" name="D" value="1"></label>
+                <label class="form_label2"><input type="radio" name="D" value="2"></label>
+                <label class="form_label3"><input type="radio" name="D" value="3"></label>
+                <label class="form_label4"><input type="radio" name="D" value="4"></label>
+                <label class="form_label5"><input type="radio" name="D" value="5"></label>
+                <label class="form_label6"><input type="radio" name="D" value="6"></label>
+                <label class="form_label7"><input type="radio" name="D" value="7"></label>
+            </dl>
+        </div>
+        <button class="ui right labeled icon button" onclick="shift_2_nextchart()">
+            <i class="right arrow icon"></i>
+            下一题
+        </button>
+    </div>
+</div>
+<div class="button_box">
+    <button type="button" class="evaluate_shift" onclick="check_modal1()">确&emsp;认</button>
+</div>
+
+<script>
+    
+    const hr_3floor1 = {
+        "name": "flare",
+        "children": [{
+                "name": "animate",
+                "children": [{
+                        "name": "Easing",
+                        "size": 2226
+                    },
+                    {
+                        "name": "interpolate",
+                        "size": 3542
+                    },
+                    {
+                        "name": "Parallel",
+                        "size": 3176
+                    }
+                ]
+            },
+            {
+                "name": "datas",
+                "children": [{
+                        "name": "DataField",
+                        "size": 2100
+                    },
+                    {
+                        "name": "Schema",
+                        "size": 2865
+                    },
+                    {
+                        "name": "Source",
+                        "size": 3531
+                    }
+                ]
+            },
+            {
+                "name": "display",
+                "children": [{
+                        "name": "DirtySprite",
+                        "size": 2732
+                    },
+                    {
+                        "name": "RectSprite",
+                        "size": 2623
+                    },
+                    {
+                        "name": "TextSprite",
+                        "size": 1923
+                    }
+                ]
+            },
+            {
+                "name": "physics",
+                "children": [{
+                        "name": "Gravity",
+                        "size": 2336
+                    },
+                    {
+                        "name": "IForce",
+                        "size": 1919
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 2322
+                    },
+                    {
+                        "name": "Simulation",
+                        "size": 3265
+                    }
+                ]
+            },
+            {
+                "name": "query",
+                "children": [{
+                        "name": "Expression",
+                        "size": 2748
+                    },
+                    {
+                        "name": "Orage",
+                        "size": 1970
+                    },
+                    {
+                        "name": "Range",
+                        "size": 1394
+                    },
+                    {
+                        "name": "Sum",
+                        "size": 2791
+                    }
+                ]
+            },
+            {
+                "name": "scale",
+                "children": [{
+                        "name": "Linear",
+                        "size": 2316
+                    },
+                    {
+                        "name": "Ordinal",
+                        "size": 3000
+                    },
+                    {
+                        "name": "MoonSize",
+                        "size": 2566
+                    },
+
+                    {
+                        "name": "TimeScale",
+                        "size": 2821
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_3floor2 = {
+        "name": "vague",
+        "children": [{
+                "name": "rectangle",
+                "children": [{
+                        "name": "Sequence",
+                        "size": 1968
+                    },
+                    {
+                        "name": "Interment",
+                        "size": 2389
+                    },
+                    {
+                        "name": "Parallel",
+                        "size": 3376
+                    }
+                ]
+            },
+            {
+                "name": "datas",
+                "children": [{
+                        "name": "DataField",
+                        "size": 2530
+                    },
+                    {
+                        "name": "DataSet",
+                        "size": 1586
+                    },
+                    {
+                        "name": "Source",
+                        "size": 1885
+                    }
+                ]
+            },
+            {
+                "name": "discover",
+                "children": [{
+                        "name": "DirtySprite",
+                        "size": 2639
+                    },
+                    {
+                        "name": "LineSprite",
+                        "size": 2236
+                    },
+                    {
+                        "name": "RectSprite",
+                        "size": 1623
+                    }
+                ]
+            },
+            {
+                "name": "physics",
+                "children": [{
+                        "name": "GravityForce",
+                        "size": 1336
+                    },
+                    {
+                        "name": "Forcle",
+                        "size": 1919
+                    },
+                    {
+                        "name": "NBodyForce",
+                        "size": 1918
+                    },
+                    {
+                        "name": "Fare",
+                        "size": 1625
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 2022
+                    }
+                ]
+            },
+            {
+                "name": "query",
+                "children": [{
+                        "name": "Iterator",
+                        "size": 2748
+                    },
+                    {
+                        "name": "Mace",
+                        "size": 3048
+                    },
+                    {
+                        "name": "Rage",
+                        "size": 1594
+                    }
+                ]
+            },
+            {
+                "name": "trace",
+                "children": [{
+                        "name": "IScaleMap",
+                        "size": 2000
+                    },
+                    {
+                        "name": "Scale",
+                        "size": 1616
+                    },
+                    {
+                        "name": "Ordinal",
+                        "size": 3270
+                    },
+                    {
+                        "name": "MoonSize",
+                        "size": 2455
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_3floor3 = {
+        "name": "animate",
+        "children": [{
+                "name": "rectangle",
+                "children": [{
+                        "name": "Sequence",
+                        "size": 1968
+                    },
+                    {
+                        "name": "Obvious",
+                        "size": 2055
+                    },
+                    {
+                        "name": "Lockie",
+                        "size": 3176
+                    },
+                    {
+                        "name": "Backmon",
+                        "size": 1556
+                    }
+                ]
+            },
+            {
+                "name": "oneaman",
+                "children": [{
+                        "name": "Plately",
+                        "size": 3698
+                    },
+                    {
+                        "name": "Dateme",
+                        "size": 2230
+                    },
+                    {
+                        "name": "DataSet",
+                        "size": 1886
+                    },
+                    {
+                        "name": "DataSour",
+                        "size": 1305
+                    }
+                ]
+            },
+            {
+                "name": "dirty",
+                "children": [{
+                        "name": "DesireSprite",
+                        "size": 2639
+                    },
+                    {
+                        "name": "TechSprite",
+                        "size": 1623
+                    },
+                    {
+                        "name": "UomaSprite",
+                        "size": 3204
+                    }
+                ]
+            },
+            {
+                "name": "wearn",
+                "children": [{
+                        "name": "GraeForce",
+                        "size": 1336
+                    },
+                    {
+                        "name": "Noednd",
+                        "size": 1919
+                    },
+                    {
+                        "name": "NBodyForce",
+                        "size": 3200
+                    },
+                    {
+                        "name": "FaceForce",
+                        "size": 1825
+                    },
+                    {
+                        "name": "SomeFore",
+                        "size": 2865
+                    }
+                ]
+            },
+            {
+                "name": "appear",
+                "children": [{
+                        "name": "CompositeExpression",
+                        "size": 1948
+                    },
+                    {
+                        "name": "Rager",
+                        "size": 1594
+                    },
+                    {
+                        "name": "Soney",
+                        "size": 1298
+                    }
+                ]
+            },
+            {
+                "name": "Sloan",
+                "children": [{
+                        "name": "ScaleMap",
+                        "size": 3250
+                    },
+                    {
+                        "name": "OurScale",
+                        "size": 3770
+                    },
+                    {
+                        "name": "YouSize",
+                        "size": 2055
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_3floor4 = {
+        "name": "look",
+        "children": [{
+                "name": "flare",
+                "children": [{
+                        "name": "Jone",
+                        "size": 3256
+                    },
+                    {
+                        "name": "Scalene",
+                        "size": 1968
+                    },
+                    {
+                        "name": "Eassmen",
+                        "size": 2555
+                    },
+                    {
+                        "name": "Bestern",
+                        "size": 1689
+                    }
+                ]
+            },
+            {
+                "name": "donemy",
+                "children": [{
+                        "name": "Umems",
+                        "size": 4698
+                    },
+                    {
+                        "name": "Data",
+                        "size": 3250
+                    }
+                ]
+            },
+            {
+                "name": "sleey",
+                "children": [{
+                        "name": "Desirite",
+                        "size": 2639
+                    },
+                    {
+                        "name": "LineSite",
+                        "size": 2236
+                    },
+                    {
+                        "name": "Techte",
+                        "size": 1623
+                    },
+                    {
+                        "name": "UomaSite",
+                        "size": 3204
+                    }
+                ]
+            },
+            {
+                "name": "grane",
+                "children": [{
+                        "name": "Noednd",
+                        "size": 1990
+                    },
+                    {
+                        "name": "NBodForce",
+                        "size": 3200
+                    },
+                    {
+                        "name": "FaceForce",
+                        "size": 1825
+                    },
+                    {
+                        "name": "SomeFore",
+                        "size": 2810
+                    }
+                ]
+            },
+            {
+                "name": "occean",
+                "children": [{
+                        "name": "Coxpress",
+                        "size": 3548
+                    },
+                    {
+                        "name": "EonItera",
+                        "size": 2748
+                    },
+                    {
+                        "name": "Macae",
+                        "size": 3748
+                    },
+                    {
+                        "name": "Addenre",
+                        "size": 2002
+                    }
+                ]
+            },
+            {
+                "name": "wrong",
+                "children": [{
+                        "name": "ScaleMap",
+                        "size": 3250
+                    },
+                    {
+                        "name": "OurScale",
+                        "size": 3870
+                    }
+                ]
+            }
+        ]
+    }
+
+    const hr_5floor1 = {
+        "name": "brake",
+        "children": [{
+                "name": "dislate",
+                "children": [
+                    {
+                        "name": "Function",
+                        "children": [{
+                                "name": "Blley",
+                                "size": 1100
+                            },
+                            {
+                                "name": "Recment",
+                                "children": [{
+                                    "name": "Borne",
+                                    "size": 1320
+                                },
+                                {
+                                "name": "Rectangle",
+                                "size": 1120
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "polate",
+                        "children": [{
+                                "name": "Array",
+                                "size": 1120
+                            },
+                            {
+                                "name": "Rectangle",
+                                "size": 1290
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Scheduler",
+                        "children": [{
+                                "name": "Matrix",
+                                "children": [{
+                                    "name": "Dateme",
+                                    "size": 1252
+                                    },
+                                    {
+                                        "name": "clara",
+                                        "size": 1120
+                                }]
+                            },
+                            {
+                                "name": "Sparse",
+                                "size": 1366
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "younger",
+                "children": [{
+                        "name": "convert",
+                        "children": [
+                            {
+                                "name": "Deary",
+                                "children": [{
+                                        "name": "Wean",
+                                        "size": 1291
+                                    },
+                                    {
+                                        "name": "Venment",
+                                        "size": 1124
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "IData",
+                                "size": 1180
+                            }
+                        ]
+                    },
+                    {
+                        "name": "DataField",
+                        "size": 1214
+                    }      
+                ]
+            },
+            {
+                "name": "remedy",
+                "children": [{
+                        "name": "DirtySprite",
+                        "children": [{
+                                "name": "Datement",
+                                "children": [{
+                                        "name": "Aoon",
+                                        "size": 1089
+                                    },
+                                    {
+                                        "name": "Jnon",
+                                        "size": 1194
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Abendant",
+                                "size": 1286
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Unique",
+                        "children": [{
+                                "name": "Comenton",
+                                "size": 1221
+                            },
+                            {
+                                "name": "Grammar",
+                                "children": [{
+                                        "name": "Cacnm",
+                                        "size": 1118
+                                    },
+                                    {
+                                        "name": "Veern",
+                                        "size": 1320
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "obstacle",
+                "children": [
+                    {
+                        "name": "NBodyForce",
+                        "children": [{
+                                "name": "Babam",
+                                "children": [{
+                                        "name": "Funm",
+                                        "size": 1318
+                                    },
+                                    {
+                                        "name": "Inma",
+                                        "size": 1090
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Bluent",
+                                "size": 1220
+                            },
+                            {
+                                "name": "Glance",
+                                "size": 1125
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 1322
+                    },
+                    {
+                        "name": "Simulation",
+                        "children": [{
+                                "name": "Utnn",
+                                "size": 1105
+                            },
+                            {
+                                "name": "Boomen",
+                                "size": 1394
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "torture",
+                "children": [
+                    {
+                        "name": "Composite",
+                        "children": [{
+                                "name": "Caomat",
+                                "size": 1242
+                            },
+                            {
+                                "name": "Acentment",
+                                "size": 1098
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Expression",
+                        "size": 1194
+                    }
+                ]
+            },
+            {
+                "name": "boundary",
+                "children": [{
+                        "name": "IScaleMap",
+                        "size": 1805
+                    },
+                    {
+                        "name": "OrdinalScale",
+                        "children": [{
+                                "name": "ARont",
+                                "size": 1612
+                            },
+                            {
+                                "name": "Qcoon",
+                                "children": [{
+                                        "name": "Foot",
+                                        "size": 1323
+                                    },
+                                    {
+                                        "name": "Cutee",
+                                        "size": 1094
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "TimeScale",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1390
+                            },
+                            {
+                                "name": "Emont",
+                                "children": [{
+                                        "name": "Woon",
+                                        "size": 1099
+                                    },
+                                    {
+                                        "name": "Yume",
+                                        "size": 1203
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_5floor2 = {
+        "name": "plame",
+        "children": [{
+                "name": "animate",
+                "children": [
+                    {
+                        "name": "Parallel",
+                        "children": [{
+                                "name": "Sloon",
+                                "size": 1300
+                            },
+                            {
+                                "name": "Recment",
+                                "children": [{
+                                    "name": "Team",
+                                    "size": 1220
+                                },
+                                {
+                                "name": "Datelator",
+                                "size": 1080
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Schedule",
+                        "children": [{
+                                "name": "Array",
+                                "size": 1320
+                            },
+                            {
+                                "name": "IMatrix",
+                                "size": 1090
+                            },
+                            {
+                                "name": "Easing",
+                                "size": 890
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Function",
+                        "children": [{
+                                "name": "Sparse",
+                                "children": [{
+                                    "name": "Dateme",
+                                    "size": 1252
+                                    },
+                                    {
+                                        "name": "clara",
+                                        "size": 1120
+                                }]
+                            },
+                            {
+                                "name": "Daney",
+                                "size": 1366
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "younger",
+                "children": [{
+                        "name": "convert",
+                        "children": [
+                            {
+                                "name": "Deary",
+                                "children": [{
+                                        "name": "Wean",
+                                        "size": 1291
+                                    },
+                                    {
+                                        "name": "Venment",
+                                        "size": 1124
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "IData",
+                                "size": 1180
+                            }
+                        ]
+                    },
+                    {
+                        "name": "DataField",
+                        "size": 1214
+                    },
+                    {
+                        "name": "DataSet",
+                        "children": [
+                            {
+                                "name": "Darey",
+                                "children": [{
+                                        "name": "Query",
+                                        "size": 1091
+                                    },
+                                    {
+                                        "name": "Glueen",
+                                        "size": 824
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "IData",
+                                "size": 780
+                            }
+                        ]
+                    }          
+                ]
+            },
+            {
+                "name": "scale",
+                "children": [{
+                        "name": "Linescale",
+                        "children": [{
+                                "name": "Bugent",
+                                "children": [{
+                                        "name": "Yume",
+                                        "size": 789
+                                    },
+                                    {
+                                        "name": "Jelly",
+                                        "size": 1394
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Abendant",
+                                "size": 1586
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Dismoment",
+                        "children": [{
+                                "name": "Aront",
+                                "size": 1321
+                            },
+                            {
+                                "name": "Origin",
+                                "children": [{
+                                        "name": "Cutee",
+                                        "size": 1118
+                                    },
+                                    {
+                                        "name": "Toaste",
+                                        "size": 1520
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "match",
+                "children": [
+                    {
+                        "name": "Particle",
+                        "children": [{
+                                "name": "Simulate",
+                                "children": [{
+                                        "name": "Umeat",
+                                        "size": 1318
+                                    },
+                                    {
+                                        "name": "Boom",
+                                        "size": 890
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hator",
+                                "size": 1420
+                            },
+                            {
+                                "name": "Glance",
+                                "size": 1125
+                            }
+                        ]
+                    },               
+                    {
+                        "name": "Gravice",
+                        "children": [{
+                                "name": "Utnn",
+                                "size": 1105
+                            },
+                            {
+                                "name": "Inotion",
+                                "size": 1394
+                            },
+                            {
+                                "name": "Abute",
+                                "size": 994
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "query",
+                "children": [
+                    {
+                        "name": "Compress",
+                        "children": [{
+                                "name": "HeapNode",
+                                "size": 942
+                            },
+                            {
+                                "name": "QeanBeat",
+                                "children": [{
+                                        "name": "Walnut",
+                                        "size": 1023
+                                    },
+                                    {
+                                        "name": "Conconut",
+                                        "size": 894
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Expression",
+                        "size": 1150
+                    }
+                ]
+            },
+            {
+                "name": "specom",
+                "children": [{
+                        "name": "LineSprite",
+                        "size": 1705
+                    },
+                    {
+                        "name": "DiaryDate",
+                        "children": [{
+                                "name": "Intent",
+                                "size": 1512
+                            },
+                            {
+                                "name": "Deletement",
+                                "children": [{
+                                        "name": "Bocon",
+                                        "size": 1423
+                                    },
+                                    {
+                                        "name": "Racee",
+                                        "size": 994
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "TimeScale",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1610
+                            },
+                            {
+                                "name": "Emont",
+                                "children": [{
+                                        "name": "Corne",
+                                        "size": 1099
+                                    },
+                                    {
+                                        "name": "Gluece",
+                                        "size": 1303
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_5floor3 = {
+        "name": "coate",
+        "children": [{
+                "name": "pameto",
+                "children": [
+                    {
+                        "name": "Sequence",
+                        "children": [{
+                                "name": "Bear",
+                                "size": 1780
+                            },
+                            {
+                                "name": "Recoat",
+                                "children": [{
+                                    "name": "Moree",
+                                    "size": 1550
+                                },
+                                {
+                                "name": "Woyoro",
+                                "size": 1890
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "polate",
+                        "children": [{
+                                "name": "Calent",
+                                "size": 1580
+                            },
+                            {
+                                "name": "Recement",
+                                "size": 1780
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Interpolate",
+                        "children": [{
+                                "name": "Matrix",
+                                "children": [{
+                                    "name": "Delley",
+                                    "size": 1802
+                                    },
+                                    {
+                                    "name": "Clara",
+                                    "size": 1550
+                                }]
+                            },
+                            {
+                                "name": "Sparo",
+                                "size": 1620
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "lucky",
+                "children": [{
+                        "name": "natural",
+                        "children": [
+                            {
+                                "name": "Skealer",
+                                "children": [{
+                                        "name": "Worn",
+                                        "size": 1820
+                                    },
+                                    {
+                                        "name": "Proxme",
+                                        "size": 1580
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "Kater",
+                                "size": 1790
+                            }
+                        ]
+                    },
+                    {
+                        "name": "DataField",
+                        "size": 1784
+                    }      
+                ]
+            },
+            {
+                "name": "groove",
+                "children": [{
+                        "name": "BareForce",
+                        "children": [{
+                                "name": "Dalemoon",
+                                "children": [{
+                                        "name": "Quar",
+                                        "size": 1799
+                                    },
+                                    {
+                                        "name": "Jomey",
+                                        "size": 1574
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Composite",
+                                "size": 1680
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Western",
+                        "children": [{
+                                "name": "Twerane",
+                                "size": 1600
+                            },
+                            {
+                                "name": "Bluen",
+                                "children": [{
+                                        "name": "Cacnm",
+                                        "size": 1580
+                                    },
+                                    {
+                                        "name": "Haterme",
+                                        "size": 1780
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Denreix",
+                                "size": 1721
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "displate",
+                "children": [
+                    {
+                        "name": "ScaleMap",
+                        "children": [{
+                                "name": "Babecute",
+                                "children": [{
+                                        "name": "Veern",
+                                        "size": 1860
+                                    },
+                                    {
+                                        "name": "Teanet",
+                                        "size": 1550
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Bloom",
+                                "size": 1660
+                            },
+                            {
+                                "name": "Glance",
+                                "size": 2285
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 1822
+                    },
+                    {
+                        "name": "Simulation",
+                        "children": [{
+                                "name": "Sprite",
+                                "size": 1705
+                            },
+                            {
+                                "name": "Abondend",
+                                "size": 1554
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Origin",
+                "children": [
+                    {
+                        "name": "JonsonWent",
+                        "children": [{
+                                "name": "Neape",
+                                "size": 1782
+                            },
+                            {
+                                "name": "Acentment",
+                                "size": 1598
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Converse",
+                        "size": 1894
+                    }
+                ]
+            },
+            {
+                "name": "format",
+                "children": [{
+                        "name": "IScaleMap",
+                        "size": 1705
+                    },
+                    {
+                        "name": "OrdinalScale",
+                        "children": [{
+                                "name": "Diamely",
+                                "size": 1590
+                            },
+                            {
+                                "name": "Kellen",
+                                "children": [{
+                                        "name": "Emonte",
+                                        "size": 1810
+                                    },
+                                    {
+                                        "name": "Sloant",
+                                        "size": 1584
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SpaceScale",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1790
+                            },
+                            {
+                                "name": "Flower",
+                                "children": [{
+                                        "name": "Bluea",
+                                        "size": 1580
+                                    },
+                                    {
+                                        "name": "Camera",
+                                        "size": 1900
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_5floor4 = {
+        "name": "block",
+        "children": [{
+                "name": "recovery",
+                "children": [
+                    {
+                        "name": "Interpolate",
+                        "children": [{
+                                "name": "Grace",
+                                "size": 1630
+                            },
+                            {
+                                "name": "Decent",
+                                "children": [{
+                                    "name": "Teamn",
+                                    "size": 920
+                                },
+                                {
+                                "name": "Conversion",
+                                "size": 1280
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Converter",
+                        "children": [{
+                                "name": "GravityForce",
+                                "size": 1420
+                            },
+                            {
+                                "name": "IMatrix",
+                                "children": [{
+                                    "name": "Clara",
+                                    "size": 520
+                                },
+                                {
+                                "name": "Ruley",
+                                "size": 990
+                                }
+                            ]
+                            },
+                            {
+                                "name": "Aggregate",
+                                "size": 1290
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Composition",
+                        "children": [{
+                                "name": "Sparse",
+                                "children": [{
+                                    "name": "Scarlet",
+                                    "size": 1252
+                                    },
+                                    {
+                                        "name": "grose",
+                                        "size": 1120
+                                }]
+                            },
+                            {
+                                "name": "Silvery",
+                                "size": 1366
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "carrot",
+                "children": [{
+                        "name": "Pumpkin",
+                        "children": [
+                            {
+                                "name": "Mutton",
+                                "children": [{
+                                        "name": "Ivory",
+                                        "size": 1491
+                                    },
+                                    {
+                                        "name": "violet",
+                                        "size": 1024
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "Bakey",
+                                "size": 2180
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Caulifower",
+                        "size": 1415
+                    },
+                    {
+                        "name": "Fennel",
+                        "children": [
+                            {
+                                "name": "Garlic",
+                                "children": [{
+                                        "name": "Radish",
+                                        "size": 1191
+                                    },
+                                    {
+                                        "name": "Gluece",
+                                        "size": 905
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "Sirloin",
+                                "size": 1180
+                            }
+                        ]
+                    }          
+                ]
+            },
+            {
+                "name": "brosh",
+                "children": [{
+                        "name": "Turkey",
+                        "children": [{
+                                "name": "Bugent",
+                                "children": [{
+                                        "name": "Cucumber",
+                                        "size": 789
+                                    },
+                                    {
+                                        "name": "Capsicum",
+                                        "size": 1394
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pineapple",
+                                "size": 1586
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Hazelnut",
+                        "children": [{
+                                "name": "Walnut",
+                                "children": [{
+                                        "name": "Pluma",
+                                        "size": 818
+                                    },
+                                    {
+                                        "name": "Grape",
+                                        "size": 1020
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Chestnut",
+                                "children": [{
+                                        "name": "Guava",
+                                        "size": 1018
+                                    },
+                                    {
+                                        "name": "Coconut",
+                                        "size": 1520
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "peach",
+                "children": [
+                    {
+                        "name": "Mulberry",
+                        "children": [{
+                                "name": "Mango",
+                                "children": [{
+                                        "name": "Date",
+                                        "size": 1818
+                                    },
+                                    {
+                                        "name": "Entree",
+                                        "size": 1290
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hator",
+                                "size": 1590
+                            },
+                            {
+                                "name": "Cracker",
+                                "size": 1225
+                            }
+                        ]
+                    },               
+                    {
+                        "name": "Mushroom",
+                        "children": [{
+                                "name": "Lettuce",
+                                "size": 1205
+                            },
+                            {
+                                "name": "Melon",
+                                "children": [{
+                                        "name": "Beetoon",
+                                        "size": 1518
+                                    },
+                                    {
+                                        "name": "Celery",
+                                        "size": 890
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Cutletty",
+                                "size": 999
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "tomato",
+                "children": [
+                    {
+                        "name": "Banqueck",
+                        "children": [{
+                                "name": "HeapNode",
+                                "size": 1092
+                            },
+                            {
+                                "name": "Beancurd",
+                                "size": 1400
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Greedance",
+                        "size": 1150
+                    }
+                ]
+            },
+            {
+                "name": "cherry",
+                "children": [{
+                        "name": "Lonquet",
+                        "size": 1405
+                    },
+                    {
+                        "name": "Peanute",
+                        "children": [{
+                                "name": "Figance",
+                                "size": 1712
+                            },
+                            {
+                                "name": "Biscuick",
+                                "children": [{
+                                        "name": "Crispe",
+                                        "size": 1423
+                                    },
+                                    {
+                                        "name": "Pearely",
+                                        "size": 1094
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Gymnastic",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1610
+                            },
+                            {
+                                "name": "Fency",
+                                "children": [{
+                                        "name": "Discus",
+                                        "size": 1049
+                                    },
+                                    {
+                                        "name": "Javelin",
+                                        "size": 1399
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+    var json_array = [hr_3floor1, hr_3floor2, hr_5floor1, hr_5floor2, hr_3floor3, hr_3floor4, hr_5floor3, hr_5floor4];
+
+    format = d3.format("d");
+    
+    const height = window.innerHeight-10;
+    const width = height;//0.75 * window.innerWidth,
+
+    var obj_array = [];
+
+    json_array.forEach(function (data, index, array) {
+        id = index + 1;
+        window['new_object' + id] = new create_obj(data, id);
+        obj_array.push(window['new_object' + id]);
+    });
+
+    var start = new Date();
+    var elapsed_time=0;
+
+    var option_text_array=[];
+    var option_text;
+
+    var hide_mode=true;
+
+    var current_obj = new_object1;
+    var div = d3.select(".svg_box");
+
+    hide_charts();
+    
+    function start_charts(){
+        d3.select('.cover').remove();
+        d3.select('.svg_box').style('display',"");
+        d3.select('.shadow').style('display',"none");
+        d3.select('.shadow1').style('display',"none");
+        d3.select('.button_box').style("display","");
+        render_Icicle(current_obj);
+        render_QA(current_obj.id);
+        start = new Date();
+    }
+    function hide_charts(){
+        d3.select('.svg_box').style('display',"none");
+        d3.select('.shadow').style('display',"none");
+        d3.select('.shadow1').style('display',"none");
+        d3.select('.button_box').style("display","none");
+    }
+    function startTime() {
+            let h1 = start.getHours();
+            let m1 = start.getMinutes();
+            let s1 = start.getSeconds(); 
+            
+            function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;}
+            return i;}
+            
+            let now = new Date();
+            let h2 = now.getHours();
+            let m2 = now.getMinutes();
+            let s2 = now.getSeconds();
+            elapsed_time = (m2-m1)*60+(s2-s1);
+            // setTimeout(function () {
+            //     startTime()
+            // }, 50);
+        }
+    function render_Icicle(json_data) {
+        var root = partition(json_data.data);
+        var focus = root;
+        var svg = div.append("svg")
+            .attr("class", 'svg1')
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0,0, width, height])
+            // .style("font", '12 sans-serif')
+            .style("background-color", "white");
+        var svg2 = div.append("svg")
+            .attr("class", 'svg2')
+            .style("left", '70vw')
+            .attr("width", 60)
+            .attr("height", 60);
+        cell = svg
+            .selectAll("g")
+            .data(root.descendants())
+            .join("g")
+            .attr("transform", d => `translate(${d.y0},${d.x0})`);
+        var rect = cell.append("rect")
+            .attr("width", d => rectWidth(d))
+            .attr("height", d => rectHeight(d))
+            .attr("fill-opacity", 0.6)
+            .attr("fill", function (d) {
+                color_de = 240 - 80 * (d.depth) / (root.height + 1);
+                s_de = 100 - 30 * (d.depth) / (root.height + 1);
+                l_de = 50 - 20 * (d.depth) / (root.height + 1);
+                return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
+            })
+            .style("cursor", "pointer");
+
+        var text = cell.append("text")
+            .style("user-select", "none")
+            .attr("pointer-events", "none")
+            .attr("x", d => labelMiddle_x(d) - getTextWidth(d.data.name, 16) / 2)
+            .attr("y", d => labelMiddle_y(d))
+            .attr("fill-opacity", d => +labelVisible(d));
+
+        text.append("tspan")
+            .text(d => d.data.name);
+
+        cell.append("title")
+            .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n   ${format(d.value)}`);
+
+        var circle = svg2.append('circle')
+            .attr("cx", 30).attr("cy", 30)
+            .attr("r", 30)
+            .attr("fill", 'rgb(123, 123, 123)')
+            .attr("fill-opacity", 0.6);
+
+        var text_id = svg2.append("text")
+            .attr("x", 30 - getTextWidth(json_data.id, 32) / 2).attr("y", 42)
+            .text(json_data.id);
+    }
+
+    function render_Sunburst(json_data, {
+        value, // given a node d, returns a quantitative value (for area encoding; null for count)
+        sort = (a, b) => d3.descending(a.value, b.value), // how to sort nodes prior to layout
+        label, // given a node d, returns the name to display on the rectangle
+        title, // given a node d, returns its hover text
+        padding = 1, // separation between arcs
+        radius = Math.min(width, height)/2, // outer radius
+        fillOpacity = 0.6, // fill opacity for arcs
+        } = {}) {
+
+        var root = d3.hierarchy(json_data.data);
+
+        value == null ? root.count() : root.sum(d => Math.max(0, value(d)));
+
+        // Sort the leaves (typically by descending value for a pleasing layout).
+        if (sort != null) root.sort(sort);
+
+        // Compute the partition layout. Note polar coordinates: x is angle and y is radius.
+        d3.partition().size([2 * Math.PI, radius])(root);
+
+
+        // Construct an arc generator.
+        const arc = d3.arc()
+            .startAngle(d => d.x0)
+            .endAngle(d => d.x1)
+            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 2 * padding / radius))
+            .padRadius(radius / 2)
+            .innerRadius(d => d.y0)
+            .outerRadius(d => d.y1 - padding);
+
+        var svg = div.append("svg")
+            .attr("viewBox", [-width/2,-height/2, width, height])
+            .attr("class","svg1")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", '0.8em')
+            .attr("text-anchor", "middle");
+
+        const cell = svg
+            .selectAll("a")
+            .data(root.descendants())
+            .join("a")
+
+        cell.append("path")
+            .attr("d", arc)
+            .attr("fill", function (d) {
+                color_de = 240 - 80 * (d.depth) / (root.height + 1);
+                s_de = 100 - 30 * (d.depth) / (root.height + 1);
+                l_de = 50 - 20 * (d.depth) / (root.height + 1);
+                return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
+            })
+            .attr("fill-opacity", fillOpacity);
+
+        if (label != null) cell
+            .filter(d => (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10)
+            .append("text")
+            .attr("transform", d => {
+                if (!d.depth) return;
+                const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+                const y = (d.y0 + d.y1) / 2;
+                return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+            })
+            .attr("dy", "0.32em")
+            .text(d => label(d.data, d));
+
+        if (title != null) cell.append("title")
+            .text(d => title(d.data, d));
+        
+        var svg2 = div.append("svg")
+            .attr("class", 'svg2')
+            .style("left", '70vw')
+            .attr("width", 60)
+            .attr("height", 60);
+        var circle = svg2.append('circle')
+            .attr("cx", 30).attr("cy", 30)
+            .attr("r", 30)
+            .attr("fill", 'rgb(123, 123, 123)')
+            .attr("fill-opacity", 0.6);
+
+        var text_id = svg2.append("text")
+            .attr("x", 30 - getTextWidth(json_data.id, 32) / 2).attr("y", 42)
+            .text(json_data.id);
+    }
+
+    function create_obj(data, id) {
+        // 设置对象的属性
+        this.data = data;
+        this.id = id;
+    }
+    function gen_modal_1(){
+	    d3.select('.shadow').style("display","");
+        d3.select('.button_box').style("display","none")
+	}
+	function hide_modal_1(special_event=true){
+		if(special_event===false){
+            d3.select('.shadow').style('display',"none");
+            d3.select('.button_box').style("display","");
+            gen_modal_2();
+        }else{
+            d3.select('.shadow').style('display',"none");
+            d3.select('.button_box').style("display","")
+        }
+	}
+    function gen_modal_2(){
+	    d3.select('.shadow1').style("display","");
+        d3.select('.button_box').style("display","none")
+	}
+	function hide_modal_2(){
+		d3.select('.shadow1').style('display',"none");
+        d3.select('.button_box').style("display","")
+	}
+    function option_check1(){
+        let checked_values=[];
+        d3.select(".answers_form").selectAll("input").each(function(){
+            if(this.checked){
+                option_text=this.value;
+                option_text_array[current_obj.id-1]=option_text;
+                checked_values.push(true);
+            }else{
+                checked_values.push(false);
+            }
+            
+        });
+         return checked_values.some((d)=>d===true);  
+    }
+    function option_check2(){
+        let checked_fin_val=[];
+        let checked_values1=[];
+        let checked_values2=[];
+        let checked_values3=[];
+        let checked_values4=[];
+        //第一次遍历input元素
+        d3.select(".option1").selectAll("input").each(function(){
+            if(this.checked){
+                option_text=this.value;
+                option_text_array[current_obj.id-1]=option_text;
+                checked_values1.push(true);
+            }else{
+                checked_values1.push(false);
+            }
+        });
+        
+
+        checked_fin_val.push(checked_values1.some((d)=>d===true))
+        //第二次遍历input元素
+        d3.select(".option2").selectAll("input").each(function(){
+            if(this.checked){
+                option_text=this.value;
+                option_text_array[current_obj.id-1]=option_text;
+                checked_values2.push(true);
+            }else{
+                checked_values2.push(false);
+            }
+        });
+        
+        checked_fin_val.push(checked_values2.some((d)=>d===true))
+        //第三次遍历input元素
+        d3.select(".option3").selectAll("input").each(function(){
+            if(this.checked){
+                option_text=this.value;
+                option_text_array[current_obj.id-1]=option_text;
+                checked_values3.push(true);
+            }else{
+                checked_values3.push(false);
+            }
+        });
+        
+        checked_fin_val.push(checked_values3.some((d)=>d===true))
+        //第四次遍历input元素
+        d3.select(".option4").selectAll("input").each(function(){
+            if(this.checked){
+                option_text=this.value;
+                option_text_array[current_obj.id-1]=option_text;
+                checked_values4.push(true);
+            }else{
+                checked_values4.push(false);
+            }
+        });
+        
+        checked_fin_val.push(checked_values4.some((d)=>d===true))
+        
+        return checked_fin_val.every((d)=>d===true);  
+        
+    }
+	
+    function render_QA(id) {
+        var group_QA = div.append("div")
+            .attr("class", 'QA_form')
+            .attr("style",`margin:2px;position:absolute;top:16%;padding-right:8%;left:70vw;`);
+
+        let group_Q = group_QA.append("div")
+            .attr("class", 'questions')
+            .attr("style", "line-height:160%;font-weight:bold;font-size:1.3em;position:relative;top:1vh;")
+            
+
+        let group_A = group_QA.append("div")
+            .attr("class", 'answers')
+            .attr("style", "font-weight:bold;font-size:1.2em;position:relative;top:3vh;");
+
+        let answ_form=group_A.append("form").attr("class", 'answers_form')
+        answ_form.style("display", "block");
+
+        let answer1=answ_form.append("dt");
+        answer1.append("input").attr("type", 'radio').attr("id","answ1").attr("name", 'answer')
+            .attr("value", 'A').attr("style", "font-weight:bold;position:relative;right:-3vh;");
+        let answer_txt1=answer1.append("label")
+            .attr("for","answ1").text('A.  是')
+            .attr("style", "position:relative;right:-5vh;");
+        
+
+        let answer2=answ_form.append("dt");
+        answer2.append("input").attr("type", 'radio').attr("id","answ2").attr("name", 'answer')
+            .attr("value", 'B').attr("style", "font-weight:bold;position:relative;right:-3vh;top:1vh;")
+        let answer_txt2=answer2.append("label")
+        .attr("for","answ2").text('B.  否')
+            .attr("style", "position:relative;right:-5vh;top:1vh;");
+
+        let answer3=answ_form.append("dt");
+        answer3.append("input").attr("type", 'radio').attr("id","answ3").attr("name", 'answer')
+            .attr("value", 'C').attr("style", "font-weight:bold;position:relative;right:-3vh;top:2vh;")
+        let answer_txt3=answer3.append("label").attr("for","answ3").text('')
+            .attr("style", "position:relative;right:-5vh;top:2vh;");
+
+        let answer4=answ_form.append("dt");
+        answer4.append("input").attr("type", 'radio').attr("id","answ4").attr("name", 'answer')
+            .attr("value", 'D').attr("style", "font-weight:bold;position:relative;right:-3vh;top:3vh;")
+        let answer_txt4=answer4.append("label").attr("for","answ4").text('')
+            .attr("style", "position:relative;right:-5vh;top:3vh;");
+        
+        switch(id){
+            case 1:
+                group_Q.text("在第二层级节点“query”的子节点中，是否包含节点“Expression”？");
+                answer3.style("display","none")
+                answer4.style("display","none")
+                break;
+            case 2:
+                group_Q.text("在该图表中，节点路径“vague-rectangle-Parallel”是否正确？");
+                answer3.style("display","none")
+                answer4.style("display","none")
+                break;
+            case 3:
+                group_Q.text("在该图表中，节点路径“brake-boundary-TimeScale-Emont-Cutee”是否正确？");
+                answer3.style("display","none")
+                answer4.style("display","none")
+                break;
+            case 4:
+                group_Q.text("在节点路径“plame-animate-Function-Sparse”中，第四层级节点“Sparse”的子节点中，是否包含节点“Walnut”？");
+                answer3.style("display","none")
+                answer4.style("display","none")
+                break;
+            case 5:
+                group_Q.text("5.在第二层级节点“rectangle”的子节点中，节点“Backmon”和“Obvious”哪个的数值更大？");
+                answer3.style("display","none")
+                answer4.style("display","none")
+                answer_txt1.text('  A.  Backmon')
+                answer_txt2.text('  B.  Obvious')
+                break;
+            case 6:
+                group_Q.text("6.在第二层级节点“flare”的子节点中，数值最小的节点是？");
+                answer_txt1.text('  A.  Jone')
+                answer_txt2.text('  B.  Eassmen ')
+                answer_txt3.text('  C.  Scalene')
+                answer_txt4.text('  D.  Bestern ')
+                break;
+            case 7:
+                group_Q.text("在节点路径“coate-pameto-Interpolate-Matrix”中，第四层级节点“Matrix”的子节点中，数值最小的节点是？");
+                answer3.style("display","none")
+                answer4.style("display","none")
+                answer_txt1.text('  A.  Delley  ')
+                answer_txt2.text('  B.  Clara')
+                break;
+            case 8:
+                group_Q.text("在节点路径“block-brosh-Hazelnut-Walnut”中，第四层级节点“Walnut”的子节点中，“Pluma”是否是数值最大的节点？");
+                break;
+        }
+    }
+    function unchecked_all_input(){
+        let mlr = [1,2,3,4];
+        mlr.forEach((i)=>d3.select(`.option${i}`).selectAll("input").each(function(){
+            this.checked=false;
+        }))
+    }
+    function get_AformValue(){
+        let mlr = [1,2,3,4];
+        mlr.forEach((i)=>d3.select(`.option${i}`).selectAll("input").each(function()
+        {
+            if(this.checked){
+                console.log(this.name+":"+this.value);
+            };
+        })
+        )
+    }
+    function check_modal1() {
+        let user_finished1=option_check1();
+        if(!user_finished1){
+            gen_modal_1();//弹窗出现 
+            setTimeout(hide_modal_1, 1500);
+        }
+        else{
+            startTime();
+            console.log("第"+current_obj.id+"题所花时间:"+elapsed_time+"s"+"   "+"用户的选择:"+option_text_array[current_obj.id-1]);
+            gen_modal_2();
+        }
+
+    }
+    function shift_2_nextchart() {
+        let user_finished2=option_check2();
+        
+        if(!user_finished2){
+            hide_mode=option_check2();
+            hide_modal_2();
+            gen_modal_1();//弹窗出现 
+            setTimeout(hide_modal_1, 1500,user_finished2);
+        }
+        else{
+            get_AformValue();
+
+            hide_mode=true;
+            hide_modal_2()
+            unchecked_all_input();
+
+            start = new Date();
+            div.selectChildren().remove();
+            if (current_obj.id == 8) {
+                current_obj = null;
+                d3.select('.button_box').style("display","none");
+                d3.select('.shadow').style("display","");
+                d3.select('.modal_text').text("实验结束，感谢参与！");
+
+            } else {
+                current_obj = obj_array[current_obj.id];
+            }
+
+            if(current_obj.id%2==1){
+                render_Icicle(current_obj); 
+                render_QA(current_obj.id);
+            }
+            else{
+                render_Sunburst(current_obj,{
+                    value: d => d.size, // size of each node (file); null for internal nodes (folders)
+                    label: d => d.name, // display name for each cell
+                    title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join("/")}\n${n.value.toLocaleString("en")}`}
+                );
+                render_QA(current_obj.id);
+            }
+        }
+
+    }
+    
+    function rectHeight(d) {
+        return d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
+    }
+
+    function rectWidth(d) {
+        return d.y1 - d.y0 - Math.min(1, (d.y1 - d.y0) / 2);
+    }
+
+    function labelVisible(d) {
+        return (d.x1 - d.x0 > height / 40);
+    }
+
+    function labelMiddle_y(d) {
+        return (d.x1 - d.x0) / 2 + 5;
+    }
+
+    function labelMiddle_x(d) {
+        return (d.y1 - d.y0) / 2;
+
+    }
+
+    function partition(datas) {
+        const root = d3.hierarchy(datas)
+            .sum(d => d.size)
+            .sort((a, b) => b.height - a.height || b.size - a.size);
+        return d3.partition().size([height, width])(root);
+    }
+
+    function getTextWidth(text, fontSize) {
+        // 创建临时元素
+        const _span = document.createElement('span')
+        // 放入文本
+        _span.innerText = text
+        // 设置文字大小
+        _span.style.fontSize = fontSize + 'px'
+        // span元素转块级
+        _span.style.position = 'absolute'
+        // span放入body中
+        document.body.appendChild(_span)
+        // 获取span的宽度
+        let width = _span.offsetWidth
+        // 从body中删除该span
+        document.body.removeChild(_span)
+        // 返回span宽度
+        return width
+    }
+</script>
+
+</html>
