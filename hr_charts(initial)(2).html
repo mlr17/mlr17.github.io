@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>HR_charts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- <link rel="stylesheet" href="semantic-dist/semantic.min.js"> -->
+    <style>
+        body {
+            margin: 2px ;
+        }
+
+        .svg1 {
+            font-size: 1em;
+            position: relative;
+			left: 20%;
+        }
+        .svg2 {
+            position: absolute;
+            top: 5vh;
+            font: 32px sans-serif;
+        }
+
+        .ui.form {
+            position: absolute;
+            right: 80px;
+            top: 100px;
+            font-size: 1.3em;
+        }
+        .ui.radio.checkbox {
+            font-size: 0.8em;
+        }
+
+        #next_shift {
+            position: absolute;
+
+            bottom: 100px;
+            cursor: pointer;
+            border: 0;
+            line-height: 3;
+            padding: 0 18px;
+            font-size: 1rem;
+            text-align: center;
+            color: #fff;
+            text-shadow: 1px 1px 1px #000;
+            border-radius: 10px;
+            background-color: rgb(7, 33, 80);
+        }
+
+        #last_shift {
+            position: absolute;
+            bottom: 100px;
+            cursor: pointer;
+            border: 0;
+            line-height: 3;
+            padding: 0 18px;
+            font-size: 1rem;
+            text-align: center;
+            color: #fff;
+            text-shadow: 1px 1px 1px #000;
+            border-radius: 10px;
+            background-color: rgb(7, 33, 80);
+        }
+
+        #next_shift:hover,
+        #last_shift:hover {
+            background-color: rgb(31, 98, 222);
+        }
+
+        #next_shift:active,
+        #last_shift:active {
+            box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
+                inset 2px 2px 3px rgba(0, 0, 0, .6);
+        }
+    </style>
+</head>
+
+<div class="svg_box">
+</div>
+<div class="button_box">
+    <button type="button" id="last_shift" onclick="shift_2_lastchart()">返回</button>
+    <button type="button" id="next_shift" onclick="shift_2_nextchart()">确认并提交</button>
+</div>
+
+<script>
+    
+    var sel_text_array=[];
+    var sel_text;
+    const hr_3floor1 = {
+        "name": "flare",
+        "children": [{
+                "name": "animate",
+                "children": [{
+                        "name": "Easing",
+                        "size": 2226
+                    },
+                    {
+                        "name": "interpolate",
+                        "size": 3542
+                    },
+                    {
+                        "name": "Parallel",
+                        "size": 3176
+                    }
+                ]
+            },
+            {
+                "name": "datas",
+                "children": [{
+                        "name": "DataField",
+                        "size": 2100
+                    },
+                    {
+                        "name": "Schema",
+                        "size": 2865
+                    },
+                    {
+                        "name": "Source",
+                        "size": 3531
+                    }
+                ]
+            },
+            {
+                "name": "display",
+                "children": [{
+                        "name": "DirtySprite",
+                        "size": 2732
+                    },
+                    {
+                        "name": "RectSprite",
+                        "size": 2623
+                    },
+                    {
+                        "name": "TextSprite",
+                        "size": 1923
+                    }
+                ]
+            },
+            {
+                "name": "physics",
+                "children": [{
+                        "name": "Gravity",
+                        "size": 2336
+                    },
+                    {
+                        "name": "IForce",
+                        "size": 1919
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 2322
+                    },
+                    {
+                        "name": "Simulation",
+                        "size": 3265
+                    }
+                ]
+            },
+            {
+                "name": "query",
+                "children": [{
+                        "name": "Expression",
+                        "size": 2748
+                    },
+                    {
+                        "name": "Orage",
+                        "size": 1970
+                    },
+                    {
+                        "name": "Range",
+                        "size": 1394
+                    },
+                    {
+                        "name": "Sum",
+                        "size": 2791
+                    }
+                ]
+            },
+            {
+                "name": "scale",
+                "children": [{
+                        "name": "Linear",
+                        "size": 2316
+                    },
+                    {
+                        "name": "Ordinal",
+                        "size": 3000
+                    },
+                    {
+                        "name": "MoonSize",
+                        "size": 2566
+                    },
+
+                    {
+                        "name": "TimeScale",
+                        "size": 2821
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_3floor2 = {
+        "name": "vague",
+        "children": [{
+                "name": "rectangle",
+                "children": [{
+                        "name": "Sequence",
+                        "size": 1968
+                    },
+                    {
+                        "name": "Interment",
+                        "size": 2389
+                    },
+                    {
+                        "name": "Parallel",
+                        "size": 3376
+                    }
+                ]
+            },
+            {
+                "name": "datas",
+                "children": [{
+                        "name": "DataField",
+                        "size": 2530
+                    },
+                    {
+                        "name": "DataSet",
+                        "size": 1586
+                    },
+                    {
+                        "name": "Source",
+                        "size": 1885
+                    }
+                ]
+            },
+            {
+                "name": "discover",
+                "children": [{
+                        "name": "DirtySprite",
+                        "size": 2639
+                    },
+                    {
+                        "name": "LineSprite",
+                        "size": 2236
+                    },
+                    {
+                        "name": "RectSprite",
+                        "size": 1623
+                    }
+                ]
+            },
+            {
+                "name": "physics",
+                "children": [{
+                        "name": "GravityForce",
+                        "size": 1336
+                    },
+                    {
+                        "name": "Forcle",
+                        "size": 1919
+                    },
+                    {
+                        "name": "NBodyForce",
+                        "size": 1918
+                    },
+                    {
+                        "name": "Fare",
+                        "size": 1625
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 2022
+                    }
+                ]
+            },
+            {
+                "name": "query",
+                "children": [{
+                        "name": "Iterator",
+                        "size": 2748
+                    },
+                    {
+                        "name": "Mace",
+                        "size": 3048
+                    },
+                    {
+                        "name": "Rage",
+                        "size": 1594
+                    }
+                ]
+            },
+            {
+                "name": "trace",
+                "children": [{
+                        "name": "IScaleMap",
+                        "size": 2000
+                    },
+                    {
+                        "name": "Scale",
+                        "size": 1616
+                    },
+                    {
+                        "name": "Ordinal",
+                        "size": 3270
+                    },
+                    {
+                        "name": "MoonSize",
+                        "size": 2455
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_3floor3 = {
+        "name": "animate",
+        "children": [{
+                "name": "rectangle",
+                "children": [{
+                        "name": "Sequence",
+                        "size": 1968
+                    },
+                    {
+                        "name": "Obvious",
+                        "size": 2055
+                    },
+                    {
+                        "name": "Lockie",
+                        "size": 3176
+                    },
+                    {
+                        "name": "Backmon",
+                        "size": 1556
+                    }
+                ]
+            },
+            {
+                "name": "oneaman",
+                "children": [{
+                        "name": "Plately",
+                        "size": 3698
+                    },
+                    {
+                        "name": "Dateme",
+                        "size": 2230
+                    },
+                    {
+                        "name": "DataSet",
+                        "size": 1886
+                    },
+                    {
+                        "name": "DataSour",
+                        "size": 1305
+                    }
+                ]
+            },
+            {
+                "name": "dirty",
+                "children": [{
+                        "name": "DesireSprite",
+                        "size": 2639
+                    },
+                    {
+                        "name": "TechSprite",
+                        "size": 1623
+                    },
+                    {
+                        "name": "UomaSprite",
+                        "size": 3204
+                    }
+                ]
+            },
+            {
+                "name": "wearn",
+                "children": [{
+                        "name": "GraeForce",
+                        "size": 1336
+                    },
+                    {
+                        "name": "Noednd",
+                        "size": 1919
+                    },
+                    {
+                        "name": "NBodyForce",
+                        "size": 3200
+                    },
+                    {
+                        "name": "FaceForce",
+                        "size": 1825
+                    },
+                    {
+                        "name": "SomeFore",
+                        "size": 2865
+                    }
+                ]
+            },
+            {
+                "name": "appear",
+                "children": [{
+                        "name": "CompositeExpression",
+                        "size": 1948
+                    },
+                    {
+                        "name": "Rager",
+                        "size": 1594
+                    },
+                    {
+                        "name": "Soney",
+                        "size": 1298
+                    }
+                ]
+            },
+            {
+                "name": "Sloan",
+                "children": [{
+                        "name": "ScaleMap",
+                        "size": 3250
+                    },
+                    {
+                        "name": "OurScale",
+                        "size": 3770
+                    },
+                    {
+                        "name": "YouSize",
+                        "size": 2055
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_3floor4 = {
+        "name": "look",
+        "children": [{
+                "name": "flare",
+                "children": [{
+                        "name": "Jone",
+                        "size": 3256
+                    },
+                    {
+                        "name": "Scalene",
+                        "size": 1968
+                    },
+                    {
+                        "name": "Eassmen",
+                        "size": 2555
+                    },
+                    {
+                        "name": "Bestern",
+                        "size": 1689
+                    }
+                ]
+            },
+            {
+                "name": "donemy",
+                "children": [{
+                        "name": "Umems",
+                        "size": 4698
+                    },
+                    {
+                        "name": "Data",
+                        "size": 3250
+                    }
+                ]
+            },
+            {
+                "name": "sleey",
+                "children": [{
+                        "name": "Desirite",
+                        "size": 2639
+                    },
+                    {
+                        "name": "LineSite",
+                        "size": 2236
+                    },
+                    {
+                        "name": "Techte",
+                        "size": 1623
+                    },
+                    {
+                        "name": "UomaSite",
+                        "size": 3204
+                    }
+                ]
+            },
+            {
+                "name": "grane",
+                "children": [{
+                        "name": "Noednd",
+                        "size": 1990
+                    },
+                    {
+                        "name": "NBodForce",
+                        "size": 3200
+                    },
+                    {
+                        "name": "FaceForce",
+                        "size": 1825
+                    },
+                    {
+                        "name": "SomeFore",
+                        "size": 2810
+                    }
+                ]
+            },
+            {
+                "name": "occean",
+                "children": [{
+                        "name": "Coxpress",
+                        "size": 3548
+                    },
+                    {
+                        "name": "EonItera",
+                        "size": 2748
+                    },
+                    {
+                        "name": "Macae",
+                        "size": 3748
+                    },
+                    {
+                        "name": "Addenre",
+                        "size": 2002
+                    }
+                ]
+            },
+            {
+                "name": "wrong",
+                "children": [{
+                        "name": "ScaleMap",
+                        "size": 3250
+                    },
+                    {
+                        "name": "OurScale",
+                        "size": 3870
+                    }
+                ]
+            }
+        ]
+    }
+
+    const hr_5floor1 = {
+        "name": "brake",
+        "children": [{
+                "name": "dislate",
+                "children": [
+                    {
+                        "name": "Function",
+                        "children": [{
+                                "name": "Blley",
+                                "size": 1100
+                            },
+                            {
+                                "name": "Recment",
+                                "children": [{
+                                    "name": "Borne",
+                                    "size": 1320
+                                },
+                                {
+                                "name": "Rectangle",
+                                "size": 1120
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "polate",
+                        "children": [{
+                                "name": "Array",
+                                "size": 1120
+                            },
+                            {
+                                "name": "Rectangle",
+                                "size": 1290
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Scheduler",
+                        "children": [{
+                                "name": "Matrix",
+                                "children": [{
+                                    "name": "Dateme",
+                                    "size": 1252
+                                    },
+                                    {
+                                        "name": "clara",
+                                        "size": 1120
+                                }]
+                            },
+                            {
+                                "name": "Sparse",
+                                "size": 1366
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "younger",
+                "children": [{
+                        "name": "convert",
+                        "children": [
+                            {
+                                "name": "Deary",
+                                "children": [{
+                                        "name": "Wean",
+                                        "size": 1291
+                                    },
+                                    {
+                                        "name": "Venment",
+                                        "size": 1124
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "IData",
+                                "size": 1180
+                            }
+                        ]
+                    },
+                    {
+                        "name": "DataField",
+                        "size": 1214
+                    }      
+                ]
+            },
+            {
+                "name": "remedy",
+                "children": [{
+                        "name": "DirtySprite",
+                        "children": [{
+                                "name": "Datement",
+                                "children": [{
+                                        "name": "Aoon",
+                                        "size": 1089
+                                    },
+                                    {
+                                        "name": "Jnon",
+                                        "size": 1194
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Abendant",
+                                "size": 1286
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Unique",
+                        "children": [{
+                                "name": "Comenton",
+                                "size": 1221
+                            },
+                            {
+                                "name": "Grammar",
+                                "children": [{
+                                        "name": "Cacnm",
+                                        "size": 1118
+                                    },
+                                    {
+                                        "name": "Veern",
+                                        "size": 1320
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "obstacle",
+                "children": [
+                    {
+                        "name": "NBodyForce",
+                        "children": [{
+                                "name": "Babam",
+                                "children": [{
+                                        "name": "Funm",
+                                        "size": 1318
+                                    },
+                                    {
+                                        "name": "Inma",
+                                        "size": 1090
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Bluent",
+                                "size": 1220
+                            },
+                            {
+                                "name": "Glance",
+                                "size": 1125
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 1322
+                    },
+                    {
+                        "name": "Simulation",
+                        "children": [{
+                                "name": "Utnn",
+                                "size": 1105
+                            },
+                            {
+                                "name": "Boomen",
+                                "size": 1394
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "torture",
+                "children": [
+                    {
+                        "name": "Composite",
+                        "children": [{
+                                "name": "Caomat",
+                                "size": 1242
+                            },
+                            {
+                                "name": "Acentment",
+                                "size": 1098
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Expression",
+                        "size": 1194
+                    }
+                ]
+            },
+            {
+                "name": "boundary",
+                "children": [{
+                        "name": "IScaleMap",
+                        "size": 1805
+                    },
+                    {
+                        "name": "OrdinalScale",
+                        "children": [{
+                                "name": "ARont",
+                                "size": 1612
+                            },
+                            {
+                                "name": "Qcoon",
+                                "children": [{
+                                        "name": "Foot",
+                                        "size": 1323
+                                    },
+                                    {
+                                        "name": "Cutee",
+                                        "size": 1094
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "TimeScale",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1390
+                            },
+                            {
+                                "name": "Emont",
+                                "children": [{
+                                        "name": "Woon",
+                                        "size": 1099
+                                    },
+                                    {
+                                        "name": "Yume",
+                                        "size": 1203
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_5floor2 = {
+        "name": "plame",
+        "children": [{
+                "name": "animate",
+                "children": [
+                    {
+                        "name": "Parallel",
+                        "children": [{
+                                "name": "Sloon",
+                                "size": 1300
+                            },
+                            {
+                                "name": "Recment",
+                                "children": [{
+                                    "name": "Team",
+                                    "size": 1220
+                                },
+                                {
+                                "name": "Datelator",
+                                "size": 1080
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Schedule",
+                        "children": [{
+                                "name": "Array",
+                                "size": 1320
+                            },
+                            {
+                                "name": "IMatrix",
+                                "size": 1090
+                            },
+                            {
+                                "name": "Easing",
+                                "size": 890
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Function",
+                        "children": [{
+                                "name": "Sparse",
+                                "children": [{
+                                    "name": "Dateme",
+                                    "size": 1252
+                                    },
+                                    {
+                                        "name": "clara",
+                                        "size": 1120
+                                }]
+                            },
+                            {
+                                "name": "Daney",
+                                "size": 1366
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "younger",
+                "children": [{
+                        "name": "convert",
+                        "children": [
+                            {
+                                "name": "Deary",
+                                "children": [{
+                                        "name": "Wean",
+                                        "size": 1291
+                                    },
+                                    {
+                                        "name": "Venment",
+                                        "size": 1124
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "IData",
+                                "size": 1180
+                            }
+                        ]
+                    },
+                    {
+                        "name": "DataField",
+                        "size": 1214
+                    },
+                    {
+                        "name": "DataSet",
+                        "children": [
+                            {
+                                "name": "Darey",
+                                "children": [{
+                                        "name": "Query",
+                                        "size": 1091
+                                    },
+                                    {
+                                        "name": "Glueen",
+                                        "size": 824
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "IData",
+                                "size": 780
+                            }
+                        ]
+                    }          
+                ]
+            },
+            {
+                "name": "scale",
+                "children": [{
+                        "name": "Linescale",
+                        "children": [{
+                                "name": "Bugent",
+                                "children": [{
+                                        "name": "Yume",
+                                        "size": 789
+                                    },
+                                    {
+                                        "name": "Jelly",
+                                        "size": 1394
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Abendant",
+                                "size": 1586
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Dismoment",
+                        "children": [{
+                                "name": "Aront",
+                                "size": 1321
+                            },
+                            {
+                                "name": "Origin",
+                                "children": [{
+                                        "name": "Cutee",
+                                        "size": 1118
+                                    },
+                                    {
+                                        "name": "Toaste",
+                                        "size": 1520
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "match",
+                "children": [
+                    {
+                        "name": "Particle",
+                        "children": [{
+                                "name": "Simulate",
+                                "children": [{
+                                        "name": "Umeat",
+                                        "size": 1318
+                                    },
+                                    {
+                                        "name": "Boom",
+                                        "size": 890
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hator",
+                                "size": 1420
+                            },
+                            {
+                                "name": "Glance",
+                                "size": 1125
+                            }
+                        ]
+                    },               
+                    {
+                        "name": "Gravice",
+                        "children": [{
+                                "name": "Utnn",
+                                "size": 1105
+                            },
+                            {
+                                "name": "Inotion",
+                                "size": 1394
+                            },
+                            {
+                                "name": "Abute",
+                                "size": 994
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "query",
+                "children": [
+                    {
+                        "name": "Compress",
+                        "children": [{
+                                "name": "HeapNode",
+                                "size": 942
+                            },
+                            {
+                                "name": "QeanBeat",
+                                "children": [{
+                                        "name": "Walnut",
+                                        "size": 1023
+                                    },
+                                    {
+                                        "name": "Conconut",
+                                        "size": 894
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Expression",
+                        "size": 1150
+                    }
+                ]
+            },
+            {
+                "name": "specom",
+                "children": [{
+                        "name": "LineSprite",
+                        "size": 1705
+                    },
+                    {
+                        "name": "DiaryDate",
+                        "children": [{
+                                "name": "Intent",
+                                "size": 1512
+                            },
+                            {
+                                "name": "Deletement",
+                                "children": [{
+                                        "name": "Bocon",
+                                        "size": 1423
+                                    },
+                                    {
+                                        "name": "Racee",
+                                        "size": 994
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "TimeScale",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1610
+                            },
+                            {
+                                "name": "Emont",
+                                "children": [{
+                                        "name": "Corne",
+                                        "size": 1099
+                                    },
+                                    {
+                                        "name": "Gluece",
+                                        "size": 1303
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_5floor3 = {
+        "name": "coate",
+        "children": [{
+                "name": "pameto",
+                "children": [
+                    {
+                        "name": "Sequence",
+                        "children": [{
+                                "name": "Bear",
+                                "size": 1780
+                            },
+                            {
+                                "name": "Recoat",
+                                "children": [{
+                                    "name": "Moree",
+                                    "size": 1550
+                                },
+                                {
+                                "name": "Woyoro",
+                                "size": 1890
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "polate",
+                        "children": [{
+                                "name": "Calent",
+                                "size": 1580
+                            },
+                            {
+                                "name": "Recement",
+                                "size": 1780
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Interpolate",
+                        "children": [{
+                                "name": "Matrix",
+                                "children": [{
+                                    "name": "Delley",
+                                    "size": 1802
+                                    },
+                                    {
+                                    "name": "Clara",
+                                    "size": 1550
+                                }]
+                            },
+                            {
+                                "name": "Sparo",
+                                "size": 1620
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "lucky",
+                "children": [{
+                        "name": "natural",
+                        "children": [
+                            {
+                                "name": "Skealer",
+                                "children": [{
+                                        "name": "Worn",
+                                        "size": 1820
+                                    },
+                                    {
+                                        "name": "Proxme",
+                                        "size": 1580
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "Kater",
+                                "size": 1790
+                            }
+                        ]
+                    },
+                    {
+                        "name": "DataField",
+                        "size": 1784
+                    }      
+                ]
+            },
+            {
+                "name": "groove",
+                "children": [{
+                        "name": "BareForce",
+                        "children": [{
+                                "name": "Dalemoon",
+                                "children": [{
+                                        "name": "Quar",
+                                        "size": 1799
+                                    },
+                                    {
+                                        "name": "Jomey",
+                                        "size": 1574
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Composite",
+                                "size": 1680
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Western",
+                        "children": [{
+                                "name": "Twerane",
+                                "size": 1600
+                            },
+                            {
+                                "name": "Bluen",
+                                "children": [{
+                                        "name": "Cacnm",
+                                        "size": 1580
+                                    },
+                                    {
+                                        "name": "Haterme",
+                                        "size": 1780
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Denreix",
+                                "size": 1721
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "displate",
+                "children": [
+                    {
+                        "name": "ScaleMap",
+                        "children": [{
+                                "name": "Babecute",
+                                "children": [{
+                                        "name": "Veern",
+                                        "size": 1860
+                                    },
+                                    {
+                                        "name": "Teanet",
+                                        "size": 1550
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Bloom",
+                                "size": 1660
+                            },
+                            {
+                                "name": "Glance",
+                                "size": 2285
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Particle",
+                        "size": 1822
+                    },
+                    {
+                        "name": "Simulation",
+                        "children": [{
+                                "name": "Sprite",
+                                "size": 1705
+                            },
+                            {
+                                "name": "Abondend",
+                                "size": 1554
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Origin",
+                "children": [
+                    {
+                        "name": "JonsonWent",
+                        "children": [{
+                                "name": "Neape",
+                                "size": 1782
+                            },
+                            {
+                                "name": "Acentment",
+                                "size": 1598
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Converse",
+                        "size": 1894
+                    }
+                ]
+            },
+            {
+                "name": "format",
+                "children": [{
+                        "name": "IScaleMap",
+                        "size": 1705
+                    },
+                    {
+                        "name": "OrdinalScale",
+                        "children": [{
+                                "name": "Diamely",
+                                "size": 1590
+                            },
+                            {
+                                "name": "Kellen",
+                                "children": [{
+                                        "name": "Emonte",
+                                        "size": 1810
+                                    },
+                                    {
+                                        "name": "Sloant",
+                                        "size": 1584
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SpaceScale",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1790
+                            },
+                            {
+                                "name": "Flower",
+                                "children": [{
+                                        "name": "Bluea",
+                                        "size": 1580
+                                    },
+                                    {
+                                        "name": "Camera",
+                                        "size": 1900
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    const hr_5floor4 = {
+        "name": "block",
+        "children": [{
+                "name": "recovery",
+                "children": [
+                    {
+                        "name": "Interpolate",
+                        "children": [{
+                                "name": "Grace",
+                                "size": 1630
+                            },
+                            {
+                                "name": "Decent",
+                                "children": [{
+                                    "name": "Teamn",
+                                    "size": 920
+                                },
+                                {
+                                "name": "Conversion",
+                                "size": 1280
+                                }
+                            ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Converter",
+                        "children": [{
+                                "name": "GravityForce",
+                                "size": 1420
+                            },
+                            {
+                                "name": "IMatrix",
+                                "children": [{
+                                    "name": "Clara",
+                                    "size": 520
+                                },
+                                {
+                                "name": "Ruley",
+                                "size": 990
+                                }
+                            ]
+                            },
+                            {
+                                "name": "Aggregate",
+                                "size": 1290
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Composition",
+                        "children": [{
+                                "name": "Sparse",
+                                "children": [{
+                                    "name": "Scarlet",
+                                    "size": 1252
+                                    },
+                                    {
+                                        "name": "grose",
+                                        "size": 1120
+                                }]
+                            },
+                            {
+                                "name": "Silvery",
+                                "size": 1366
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "carrot",
+                "children": [{
+                        "name": "Pumpkin",
+                        "children": [
+                            {
+                                "name": "Mutton",
+                                "children": [{
+                                        "name": "Ivory",
+                                        "size": 1491
+                                    },
+                                    {
+                                        "name": "violet",
+                                        "size": 1024
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "Bakey",
+                                "size": 2180
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Caulifower",
+                        "size": 1415
+                    },
+                    {
+                        "name": "Fennel",
+                        "children": [
+                            {
+                                "name": "Garlic",
+                                "children": [{
+                                        "name": "Radish",
+                                        "size": 1191
+                                    },
+                                    {
+                                        "name": "Gluece",
+                                        "size": 905
+                                    }
+                                ]
+                            },                   
+                            {
+                                "name": "Sirloin",
+                                "size": 1180
+                            }
+                        ]
+                    }          
+                ]
+            },
+            {
+                "name": "brosh",
+                "children": [{
+                        "name": "Turkey",
+                        "children": [{
+                                "name": "Bugent",
+                                "children": [{
+                                        "name": "Cucumber",
+                                        "size": 789
+                                    },
+                                    {
+                                        "name": "Capsicum",
+                                        "size": 1394
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pineapple",
+                                "size": 1586
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Hazelnut",
+                        "children": [{
+                                "name": "Walnut",
+                                "children": [{
+                                        "name": "Pluma",
+                                        "size": 818
+                                    },
+                                    {
+                                        "name": "Grape",
+                                        "size": 1020
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Chestnut",
+                                "children": [{
+                                        "name": "Guava",
+                                        "size": 1018
+                                    },
+                                    {
+                                        "name": "Coconut",
+                                        "size": 1520
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "peach",
+                "children": [
+                    {
+                        "name": "Mulberry",
+                        "children": [{
+                                "name": "Mango",
+                                "children": [{
+                                        "name": "Date",
+                                        "size": 1818
+                                    },
+                                    {
+                                        "name": "Entree",
+                                        "size": 1290
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hator",
+                                "size": 1590
+                            },
+                            {
+                                "name": "Cracker",
+                                "size": 1225
+                            }
+                        ]
+                    },               
+                    {
+                        "name": "Mushroom",
+                        "children": [{
+                                "name": "Lettuce",
+                                "size": 1205
+                            },
+                            {
+                                "name": "Melon",
+                                "children": [{
+                                        "name": "Beetoon",
+                                        "size": 1518
+                                    },
+                                    {
+                                        "name": "Celery",
+                                        "size": 890
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Cutletty",
+                                "size": 999
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "tomato",
+                "children": [
+                    {
+                        "name": "Banqueck",
+                        "children": [{
+                                "name": "HeapNode",
+                                "size": 1092
+                            },
+                            {
+                                "name": "Beancurd",
+                                "size": 1400
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Greedance",
+                        "size": 1150
+                    }
+                ]
+            },
+            {
+                "name": "cherry",
+                "children": [{
+                        "name": "Lonquet",
+                        "size": 1405
+                    },
+                    {
+                        "name": "Peanute",
+                        "children": [{
+                                "name": "Figance",
+                                "size": 1712
+                            },
+                            {
+                                "name": "Biscuick",
+                                "children": [{
+                                        "name": "Crispe",
+                                        "size": 1423
+                                    },
+                                    {
+                                        "name": "Pearely",
+                                        "size": 1094
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Gymnastic",
+                        "children": [{
+                                "name": "Poament",
+                                "size": 1610
+                            },
+                            {
+                                "name": "Fency",
+                                "children": [{
+                                        "name": "Discus",
+                                        "size": 1049
+                                    },
+                                    {
+                                        "name": "Javelin",
+                                        "size": 1399
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+    var json_array = [hr_3floor1, hr_3floor2, hr_3floor3, hr_3floor4, hr_5floor1, hr_5floor2, hr_5floor3, hr_5floor4];
+
+    format = d3.format("d");
+    const height = window.innerHeight-10;
+    const width = height;
+
+    var obj_array = [];
+
+    json_array.forEach(function (data, index, array) {
+        id = index + 1;
+        window['new_object' + id] = new create_obj(data, id);
+        obj_array.push(window['new_object' + id]);
+    });
+
+    var current_obj = new_object1;
+    var div = d3.select(".svg_box");
+    var button1 = d3.select("#last_shift");
+    button1.style("right", `220px`)
+    var button2 = d3.select("#next_shift");
+    button2.style("right", `80px`)
+
+    // render_Sunburst(current_obj,{
+    //     value: d => d.size, // size of each node (file); null for internal nodes (folders)
+    //     label: d => d.name, // display name for each cell
+    //     title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}\n${n.value.toLocaleString("en")}`}
+    // ) 
+    render_Icicle(current_obj);
+    render_QA(current_obj.id);
+    
+
+   function render_Icicle(json_data) {
+        var root = partition(json_data.data);
+        var focus = root;
+        var svg = div.append("svg")
+            .attr("class", 'svg1')
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0,0, width, height])
+            // .style("font", '12 sans-serif')
+            .style("background-color", "white");
+        var svg2 = div.append("svg")
+            .attr("class", 'svg2')
+            .style("right", `280px`)
+            .attr("width", 60)
+            .attr("height", 60);
+        cell = svg
+            .selectAll("g")
+            .data(root.descendants())
+            .join("g")
+            .attr("transform", d => `translate(${d.y0},${d.x0})`);
+        var rect = cell.append("rect")
+            .attr("width", d => rectWidth(d))
+            .attr("height", d => rectHeight(d))
+            .attr("fill-opacity", 0.6)
+            .attr("fill", function (d) {
+                if(d.data.name == root.data.name) return 'grey';
+                let second_ans = d.ancestors().map(d=>d.data.name).reverse()[1];
+                const second_parents = root.children.map(d => d.data.name);
+                for(let i=0;i<second_parents.length;i++){
+                    if(second_parents[i]==second_ans){
+                        let color_de = 240 - 90 * (i) / (second_parents.length);
+                        let s_de = 100 - 40 * (i) / (second_parents.length);
+                        let l_de = 50 - 20 * (i) / (second_parents.length);
+                        return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
+                    }
+                }
+            })
+            .style("cursor", "pointer");
+
+        var text = cell.append("text")
+            .style("user-select", "none")
+            .attr("pointer-events", "none")
+            .attr("x", d => labelMiddle_x(d) - getTextWidth(d.data.name, 16) / 2)
+            .attr("y", d => labelMiddle_y(d))
+            .attr("fill-opacity", d => +labelVisible(d));
+
+        text.append("tspan")
+            .text(d => d.data.name);
+
+        cell.append("title")
+            .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n   ${format(d.value)}`);
+
+        var circle = svg2.append('circle')
+            .attr("cx", 30).attr("cy", 30)
+            .attr("r", 30)
+            .attr("fill", 'rgb(123, 123, 123)')
+            .attr("fill-opacity", 0.6);
+
+        var text_id = svg2.append("text")
+            .attr("x", 30 - getTextWidth(json_data.id, 32) / 2).attr("y", 42)
+            .text(json_data.id);
+    }
+
+    function render_Sunburst(json_data, {
+        value, // given a node d, returns a quantitative value (for area encoding; null for count)
+        sort = (a, b) => d3.descending(a.value, b.value), // how to sort nodes prior to layout
+        label, // given a node d, returns the name to display on the rectangle
+        title, // given a node d, returns its hover text
+        padding = 1, // separation between arcs
+        radius = Math.min(width, height)/2, // outer radius
+        fillOpacity = 0.6, // fill opacity for arcs
+        } = {}) {
+
+        var root = d3.hierarchy(json_data.data);
+
+        value == null ? root.count() : root.sum(d => Math.max(0, value(d)));
+
+        // Sort the leaves (typically by descending value for a pleasing layout).
+        if (sort != null) root.sort(sort);
+
+        // Compute the partition layout. Note polar coordinates: x is angle and y is radius.
+        d3.partition().size([2 * Math.PI, radius])(root);
+
+
+        // Construct an arc generator.
+        const arc = d3.arc()
+            .startAngle(d => d.x0)
+            .endAngle(d => d.x1)
+            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 2 * padding / radius))
+            .padRadius(radius / 2)
+            .innerRadius(d => d.y0)
+            .outerRadius(d => d.y1 - padding);
+
+        var svg = div.append("svg")
+            .attr("viewBox", [-width/2,-height/2, width, height])
+            .attr("class", 'svg1')
+            .attr("width", width)
+            .attr("height", height)
+            .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", '0.8em')
+            .attr("text-anchor", "middle");
+
+        const cell = svg
+            .selectAll("a")
+            .data(root.descendants())
+            .join("a")
+
+        cell.append("path")
+            .attr("d", arc)
+            .attr("fill", function (d) {
+                if(d.data.name == root.data.name) return 'grey';
+                let second_ans = d.ancestors().map(d=>d.data.name).reverse()[1];
+                const second_parents = root.children.map(d => d.data.name);
+                for(let i=0;i<second_parents.length;i++){
+                    if(second_parents[i]==second_ans){
+                        let color_de = 240 - 90 * (i) / (second_parents.length);
+                        let s_de = 100 - 40 * (i) / (second_parents.length);
+                        let l_de = 50 - 20 * (i) / (second_parents.length);
+                        return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
+                    }
+                }
+            })
+            .attr("fill-opacity", fillOpacity);
+
+        if (label != null) cell
+            .filter(d => (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10)
+            .append("text")
+            .attr("transform", d => {
+                if (!d.depth) return;
+                const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+                const y = (d.y0 + d.y1) / 2;
+                return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+            })
+            .attr("dy", "0.32em")
+            .text(d => label(d.data, d));
+
+        if (title != null) cell.append("title")
+            .text(d => title(d.data, d));
+        
+        var svg2 = div.append("svg")
+            .attr("class", 'svg2')
+            .style("right", `280px`)
+            .attr("width", 60)
+            .attr("height", 60);
+        var circle = svg2.append('circle')
+            .attr("cx", 30).attr("cy", 30)
+            .attr("r", 30)
+            .attr("fill", 'rgb(123, 123, 123)')
+            .attr("fill-opacity", 0.6);
+
+        var text_id = svg2.append("text")
+            .attr("x", 30 - getTextWidth(json_data.id, 32) / 2).attr("y", 42)
+            .text(json_data.id);
+    }
+
+    function create_obj(data, id) {
+        // 设置对象的属性
+        this.data = data;
+        this.id = id;
+    }
+    function which_selection(ele){
+		var sel_text=ele.value? ele.value : "用户未选择";
+        sel_text_array[current_obj.id-1]=sel_text;
+	}
+    function render_QA(id) {
+        var QA_div = div.append("div")
+            .attr("class", 'ui form')
+
+        var group_QA = QA_div.append("div")
+            .attr("class", 'grouped fields')
+
+        var group_A = group_QA.append("div")
+            .attr("class", 'field')
+            .style('position', 'absolute')
+            .style('top', '50px');
+        let answ1 = group_A.append("div")
+            .attr("class", 'ui radio checkbox');
+        answ1.append("input").attr("type", 'radio').attr("name", 'example2').attr("value", '是')
+            .attr("onclick", 'which_selection(this)');
+        answ1.append("label").text(" A. 是");
+
+        var group_A1 = group_QA.append("div")
+            .attr("class", 'field')
+            .style('position', 'absolute')
+            .style('top', '75px');
+        let answ2 = group_A1.append("div")
+            .attr("class", 'ui radio checkbox')
+        answ2.append("input").attr("type", 'radio').attr("name", 'example2').attr("value", '否')
+            .attr("onclick", 'which_selection(this)');
+        answ2.append("label").text(" B. 否");
+
+        switch(id){
+            case 1:
+                group_QA.append("label")
+                    .text("在第二层级节点“Datas”的子节点中")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“converters”？");
+                break;
+            case 2:
+                group_QA.append("label")
+                    .text("在第二层级节点“A”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“AA”？");
+                break;
+            case 3:
+                group_QA.append("label")
+                    .text("在第二层级节点“B”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“BB”？");
+                break;
+            case 4:
+                group_QA.append("label")
+                    
+                    .text("在第二层级节点“C”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“CC”？");
+                break;
+            case 5:
+                group_QA.append("label")
+                    
+                    .text("在第二层级节点“D”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“DD”？");
+                break;
+            case 6:
+                group_QA.append("label")
+                    
+                    .text("在第二层级节点“E”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“EE”？");
+                break;
+            case 7:
+                group_QA.append("label")
+                    
+                    .text("在第二层级节点“F”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“FF”？");
+                    break;
+            case 8:
+                group_QA.append("label")
+                    
+                    .text("在第二层级节点“G”的子节点中是否")
+                group_QA.append("label")
+                    .style("display", 'block')
+                    .text("包含子节点“GG”？");
+                break;
+        }
+    }
+
+    function shift_2_nextchart() {
+
+        div.selectChildren().remove();
+
+        if (current_obj.id == 8) {
+            current_obj = obj_array[0];
+        } else {
+            current_obj = obj_array[current_obj.id];
+        }
+
+        if(current_obj.id%2==1){
+            render_Icicle(current_obj); 
+            render_QA(current_obj.id);
+        }
+        else{
+            render_Sunburst(current_obj,{
+            value: d => d.size, // size of each node (file); null for internal nodes (folders)
+            label: d => d.name, // display name for each cell
+            title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join("/")}\n${n.value.toLocaleString("en")}`}
+            );
+            render_QA(current_obj.id);
+        }
+    }
+
+    function shift_2_lastchart() {
+
+        div.selectChildren().remove();
+
+        if (current_obj.id == 1) {
+            current_obj = obj_array[obj_array.length - 1];
+        } else {
+            current_obj = obj_array[current_obj.id - 2];
+        }
+
+        if(current_obj.id%2==1){
+            render_Icicle(current_obj); 
+            render_QA(current_obj.id);
+        }
+        else {
+            render_Sunburst(current_obj,{
+            value: d => d.size, // size of each node (file); null for internal nodes (folders)
+            label: d => d.name, // display name for each cell
+            title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join("/")}\n${n.value.toLocaleString("en")}`}
+            );
+            render_QA(current_obj.id);
+        }
+    }
+
+
+    function rectHeight(d) {
+        return d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
+    }
+
+    function rectWidth(d) {
+        return d.y1 - d.y0 - Math.min(1, (d.y1 - d.y0) / 2);
+    }
+
+    function labelVisible(d) {
+        return (d.x1 - d.x0 > height / 40);
+    }
+
+    function labelMiddle_y(d) {
+        return (d.x1 - d.x0) / 2 + 5;
+    }
+
+    function labelMiddle_x(d) {
+        return (d.y1 - d.y0) / 2;
+
+    }
+
+    function partition(datas) {
+        const root = d3.hierarchy(datas)
+            .sum(d => d.size)
+            .sort((a, b) => b.height - a.height || b.size - a.size);
+        return d3.partition().size([height, width])(root);
+    }
+
+    function getTextWidth(text, fontSize) {
+        // 创建临时元素
+        const _span = document.createElement('span')
+        // 放入文本
+        _span.innerText = text
+        // 设置文字大小
+        _span.style.fontSize = fontSize + 'px'
+        // span元素转块级
+        _span.style.position = 'absolute'
+        // span放入body中
+        document.body.appendChild(_span)
+        // 获取span的宽度
+        let width = _span.offsetWidth
+        // 从body中删除该span
+        document.body.removeChild(_span)
+        // 返回span宽度
+        return width
+    }
+</script>
+
+</html>
