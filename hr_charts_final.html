@@ -1931,11 +1931,18 @@
             .attr("height", d => rectHeight(d))
             .attr("fill-opacity", 0.6)
             .attr("fill", function (d) {
-                color_de = 240 - 80 * (d.depth) / (root.height + 1);
-                s_de = 100 - 30 * (d.depth) / (root.height + 1);
-                l_de = 50 - 20 * (d.depth) / (root.height + 1);
-                return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
-            })
+          	if(d.data.name == root.data.name) return 'grey';
+          	let second_ans = d.ancestors().map(d=>d.data.name).reverse()[1];
+          	const second_parents = root.children.map(d => d.data.name);
+          	for(let i=0;i<second_parents.length;i++){
+            		if(second_parents[i]==second_ans){
+              		let color_de = 240 - 90 * (i) / (second_parents.length);
+              		let s_de = 100 - 40 * (i) / (second_parents.length);
+              		let l_de = 50 - 20 * (i) / (second_parents.length);
+             	 	return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
+            		}
+          	}
+      	    })
             .style("cursor", "pointer");
 
         var text = cell.append("text")
@@ -2010,11 +2017,18 @@
         cell.append("path")
             .attr("d", arc)
             .attr("fill", function (d) {
-                color_de = 240 - 80 * (d.depth) / (root.height + 1);
-                s_de = 100 - 30 * (d.depth) / (root.height + 1);
-                l_de = 50 - 20 * (d.depth) / (root.height + 1);
-                return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
-            })
+          	if(d.data.name == root.data.name) return 'grey';
+          	let second_ans = d.ancestors().map(d=>d.data.name).reverse()[1];
+          	const second_parents = root.children.map(d => d.data.name);
+          	for(let i=0;i<second_parents.length;i++){
+            		if(second_parents[i]==second_ans){
+              		let color_de = 240 - 90 * (i) / (second_parents.length);
+              		let s_de = 100 - 40 * (i) / (second_parents.length);
+              		let l_de = 50 - 20 * (i) / (second_parents.length);
+             	 	return `hsl( ${color_de}, ${s_de}%, ${l_de}%)`;
+            		}
+          	}
+      	    })
             .attr("fill-opacity", fillOpacity);
 
         if (label != null) cell
