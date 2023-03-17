@@ -1669,7 +1669,7 @@
             .attr("height", d => rectHeight(d))
             .attr("fill-opacity", 0.6)
             .attr("fill", function (d) {
-                if(d.data.name == root.data.name) return 'grey';
+                if(d.data.name == root.data.name) return 'rgb(200, 201, 202)';
                 let second_ans = d.ancestors().map(d=>d.data.name).reverse()[1];
                 const second_parents = root.children.map(d => d.data.name);
                 for(let i=0;i<second_parents.length;i++){
@@ -1755,7 +1755,7 @@
         cell.append("path")
             .attr("d", arc)
             .attr("fill", function (d) {
-                if(d.data.name == root.data.name) return 'grey';
+                if(d.data.name == root.data.name) return 'rgb(200, 201, 202)';
                 let second_ans = d.ancestors().map(d=>d.data.name).reverse()[1];
                 const second_parents = root.children.map(d => d.data.name);
                 for(let i=0;i<second_parents.length;i++){
